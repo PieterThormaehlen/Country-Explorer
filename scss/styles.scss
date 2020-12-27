@@ -46,7 +46,8 @@ main {
 	display: none;
 }
 
-.country {
+.country,
+.autocomplete {
 	flex: 1 0 0;
 	background: #ffffff;
 	margin-top: 1rem;
@@ -56,4 +57,17 @@ main {
 
 .country {
 	padding: 1rem;
+}
+
+.autocomplete {
+	margin-top: unset;
+	border-top: unset;
+}
+
+.autocomplete article {
+	padding: 0.5rem 1rem;
+}
+
+[data-selected] {
+	background: #eeedec;
 }

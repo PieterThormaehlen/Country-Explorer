@@ -9,10 +9,11 @@
     <h1>Country Data</h1>
     <div class="container">
         <form class="country-selector">
-            <input type="text" name="country" placeholder="country">
+            <input type="text" name="country" autocomplete="off" placeholder="country">
         </form>
         <main>
             <section class="country"></section>
+            <section class="autocomplete" data-hidden></section>
         </main>
     </div>
     <script src="scripts/main.js"></script>
