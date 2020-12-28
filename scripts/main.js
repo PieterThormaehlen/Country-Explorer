@@ -26,6 +26,7 @@ const baseURL = 'https://restcountries.eu/rest/v2/'
 		autocompletedCountries.forEach((country) => {
 			const article = document.createElement('article')
 			article.textContent = country.name
+			article.setAttribute('role', 'button')
 			countriesFragment.appendChild(article)
 		})
 		autocompleteOutput.innerHTML = ''
@@ -37,16 +38,15 @@ const baseURL = 'https://restcountries.eu/rest/v2/'
 	countrySelector.country.addEventListener('keyup', showAutocomplete)
 
 	countrySelector.country.addEventListener('keydown', (e) => {
-		if (e.keyCode !== 40 && e.keyCode !== 38) return
+		if (e.keyCode === 13) return
+		if (e.keyCode !== 40 && e.keyCode !== 38) {
+			selectedCountryPosition = 0
+			return
+		}
 		e.preventDefault()
 		if (e.keyCode === 40 && selectedCountryPosition < positions - 1) selectedCountryPosition++
 		if (e.keyCode === 38 && selectedCountryPosition > 0) selectedCountryPosition--
 		showAutocomplete()
-	})
-
-	countrySelector.country.addEventListener('blur', async (e) => {
-		autocompleteOutput.setAttribute('data-hidden', '')
-		countryOutput.removeAttribute('data-hidden')
 	})
 
 	const getCountryData = async (countryName) => {
@@ -57,12 +57,30 @@ const baseURL = 'https://restcountries.eu/rest/v2/'
 		return data[0]
 	}
 
-	countrySelector.addEventListener('submit', async (e) => {
-		e.preventDefault()
+	const showCountry = async (e, countryName) => {
 		countrySelector.reset()
 		countrySelector.country.blur()
-		const countryData = await getCountryData(autocompleteOutput.children[selectedCountryPosition].textContent)
+		autocompleteOutput.setAttribute('data-hidden', '')
+		countryOutput.removeAttribute('data-hidden')
+		const countryData = await getCountryData(countryName)
 		countryOutput.innerHTML = `
 		<h2>${countryData.name}</h2>`
+	}
+
+	autocompleteOutput.addEventListener('mousedown', (e) => e.preventDefault())
+	autocompleteOutput.addEventListener('click', (e) => {
+		if (!e.target.closest('article')) return
+		showCountry(e, e.target.closest('article').textContent)
+	})
+
+	countrySelector.country.addEventListener('blur', (e) => {
+		selectedCountryPosition = 0
+		autocompleteOutput.setAttribute('data-hidden', '')
+		countryOutput.removeAttribute('data-hidden')
+	})
+
+	countrySelector.addEventListener('submit', (e) => {
+		e.preventDefault()
+		showCountry(e, autocompleteOutput.children[selectedCountryPosition].textContent)
 	})
 })()

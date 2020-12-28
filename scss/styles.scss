@@ -38,6 +38,7 @@ input {
 
 main {
 	flex: 1 1 auto;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 }
@@ -48,7 +49,6 @@ main {
 
 .country,
 .autocomplete {
-	flex: 1 0 0;
 	background: #ffffff;
 	margin-top: 1rem;
 	border: 1px solid black;
@@ -66,8 +66,13 @@ main {
 
 .autocomplete article {
 	padding: 0.5rem 1rem;
-}
 
-[data-selected] {
-	background: #eeedec;
+	&[data-selected] {
+		background: #eeedec;
+	}
+
+	&:hover {
+		background: #e2e2e2;
+		cursor: pointer;
+	}
 }
