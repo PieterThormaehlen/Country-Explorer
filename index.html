@@ -1,21 +1,37 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
-    <title>Country Explorer</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/styles.css">
+	<title>Country Explorer</title>
 </head>
 <body>
-    <h1>Country Explorer</h1>
-    <div class="container">
-        <form class="country-selector">
-            <input type="text" name="country" autocomplete="off" placeholder="country">
-        </form>
-        <main>
-            <section class="country"></section>
-            <section class="autocomplete" data-hidden></section>
-        </main>
-    </div>
-    <script src="scripts/main.js"></script>
+	<header>
+		<form class="country-selector">
+			<input type="text" name="country" autocomplete="off" placeholder="country">
+			<section class="autocomplete" data-hidden></section>
+		</form>
+	</header>
+	<main data-hidden>
+	</main>
+	<template id="countryTemplate">
+		<h1></h1>
+		<section class="overview">
+		</section>
+		<img alt="" class="flag">
+		<section class="region">
+			<h2>Region</h2>
+			<span class="subtitle"></span>
+			<iframe class="countryLocation" frameborder="0" scrolling="no"></iframe>
+		</section>
+	</template>
+	<template id="dataArticle">
+		<article class="data">
+			<span class="label"></span>
+			<div>
+			</div>
+		</article>
+	</template>
+	<script src="scripts/main.js"></script>
 </body>
 </html>
