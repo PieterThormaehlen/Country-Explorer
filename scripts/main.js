@@ -38,6 +38,7 @@ const baseURL = 'https://restcountries.eu/rest/v2/'
 
 	countrySelector.country.addEventListener('focus', showAutocomplete)
 	countrySelector.country.addEventListener('keyup', showAutocomplete)
+	countrySelector.country.focus()
 
 	countrySelector.country.addEventListener('keydown', (e) => {
 		if (e.keyCode === 13) return
@@ -98,7 +99,6 @@ const baseURL = 'https://restcountries.eu/rest/v2/'
 		countrySelector.reset()
 		countrySelector.country.blur()
 		autocompleteOutput.setAttribute('data-hidden', '')
-		countryOutput.removeAttribute('data-hidden')
 		const countryData = await getCountryData(countryName)
 
 		const countryMapScale = Math.sqrt(countryData.area) / 275 + 2
@@ -106,6 +106,8 @@ const baseURL = 'https://restcountries.eu/rest/v2/'
 		const contentFragment = document.querySelector('#countryTemplate').content.cloneNode(true)
 		const overview = contentFragment.querySelector('.overview')
 		const region = contentFragment.querySelector('.region')
+		const neighbors = contentFragment.querySelector('.neighbors')
+		const blocs = contentFragment.querySelector('.blocs')
 		contentFragment.querySelector('h1').innerHTML = `<span>${countryData.name}</span> (${countryData.nativeName})`
 		if (countryData.region) overview.appendChild(dataArticle('Region:', countryData.region))
 		if (countryData.capital) overview.appendChild(dataArticle('Capital:', countryData.capital))
@@ -122,7 +124,6 @@ const baseURL = 'https://restcountries.eu/rest/v2/'
 			overview.appendChild(dataArticle(label, data))
 		}
 		contentFragment.querySelector('.flag').src = countryData.flag
-
 		if (countryData.latlng.length) {
 			region.querySelector('.subtitle').textContent = countryData.subregion
 			region.querySelector('.countryLocation').src = `https://www.openstreetmap.org/export/embed.html?bbox=${countryData.latlng[1] - countryMapScale}%2C${countryData.latlng[0] - countryMapScale}%2C${countryData.latlng[1] + countryMapScale}%2C${countryData.latlng[0] + countryMapScale}&layer=mapnik&marker=${countryData.latlng[0]}%2C${countryData.latlng[1]}`
@@ -131,18 +132,27 @@ const baseURL = 'https://restcountries.eu/rest/v2/'
 		} else {
 			region.remove()
 		}
-
 		if (countryData.borders.length) {
-			const article = dataArticle('neighboring countries:', [])
-			article.querySelector('div').innerHTML = await (async () => {
-				const neighbors = await getNeighbors(countryData.borders)
-				return neighbors.map((country) => `<article>${country.name} <img alt="" src="${country.flag}"></article>`).join('')
-			})()
-			contentFragment.appendChild(article)
+			const neighborsData = await getNeighbors(countryData.borders)
+			neighborsData.forEach((neighbor) => {
+				const article = document.createElement('article')
+				article.textContent = neighbor.name
+				const flag = document.createElement('img')
+				flag.src = neighbor.flag
+				article.appendChild(flag)
+				neighbors.appendChild(article)
+			})
+		} else {
+			neighbors.remove()
 		}
 		if (countryData.regionalBlocs.length) {
-			const data = countryData.regionalBlocs.map((bloc) => bloc.name)
-			contentFragment.appendChild(dataArticle('regional blocks:', data))
+			countryData.regionalBlocs.forEach((bloc) => {
+				const span = document.createElement('span')
+				span.textContent = bloc.name
+				blocs.appendChild(span)
+			})
+		} else {
+			blocs.remove()
 		}
 
 		countryOutput.innerHTML = ''

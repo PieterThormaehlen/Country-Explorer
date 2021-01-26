@@ -6,14 +6,16 @@
 	<title>Country Explorer</title>
 </head>
 <body>
-	<header>
-		<form class="country-selector">
-			<input type="text" name="country" autocomplete="off" placeholder="country">
-			<section class="autocomplete" data-hidden></section>
-		</form>
-	</header>
-	<main data-hidden>
-	</main>
+	<div class="container">
+		<header>
+			<form class="country-selector">
+				<input type="text" name="country" autocomplete="off" placeholder="country">
+				<section class="autocomplete" data-hidden></section>
+			</form>
+		</header>
+		<main>
+		</main>
+	</div>
 	<template id="countryTemplate">
 		<h1></h1>
 		<section class="overview">
@@ -23,6 +25,12 @@
 			<h2>Region</h2>
 			<span class="subtitle"></span>
 			<iframe class="countryLocation" frameborder="0" scrolling="no"></iframe>
+		</section>
+		<section class="neighbors">
+			<h3>neighboring countries:</h3>
+		</section>
+		<section class="blocs">
+			<h3>regional blocks:</h3>
 		</section>
 	</template>
 	<template id="dataArticle">
